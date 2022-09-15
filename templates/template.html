@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>Example</h1>
+    <div id="main"></div>
+
+</body>
+<script type="text/javascript">
+
+async function waitilka(block) {
+    let condition = true;
+    while (condition) {
+        // wait 3 seconds before sending request
+        await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+
+        // send request
+        let response = await fetch('http://localhost:8080/check_status');
+        let msg = '';
+        if (response.ok) {
+            body = await response.json();
+            msg = body['status']
+            // optional: you can stop asking server
+            // condition = false;
+        } else {
+            console.log(`Exception: ${error}`);
+        }
+
+        block.innerHTML += `<h3>Resorce ${msg}</h3>`;
+    }
+};
+
+
+const main = () => {
+    const block = document.getElementById('main');
+    block.addEventListener('click', () => {
+        block.innerHTML += '<p>Just a click</p>';
+    });
+
+    waitilka(block);
+};
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    main();
+});
+
+</script>
+
+</html>
